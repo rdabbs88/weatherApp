@@ -38,6 +38,22 @@ app.get("/", (request, response) => {
     response.render("index");
 });
 
+app.get("/search", (request, response) => {
+    response.render("search");
+});
+
+app.get("/add", (request, response) => {
+    response.render("add");
+});
+
+app.get("/watchlist", (request, response) => {
+    response.render("watchlist");
+});
+
+app.get("/delete", (request, response) => {
+    response.render("delete");
+});
+
 app.listen(portNumber, (err) => {
     if (err) {
       console.log("Starting server failed.");
