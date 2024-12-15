@@ -92,7 +92,7 @@ async function getWeather(zip) {
 }
 
 async function addLocation(username, zip) {
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+    //const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
     try {
         await client.connect();
@@ -124,7 +124,7 @@ async function addLocation(username, zip) {
 }
 
 async function deleteLocation(username, zip) {
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+    //const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
     try {
         await client.connect();
@@ -144,7 +144,7 @@ async function deleteLocation(username, zip) {
 
 // helper function that returns whether or not the user is in the database table
 async function inDatabase(username) {
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+    //const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
     try {
         await client.connect();
