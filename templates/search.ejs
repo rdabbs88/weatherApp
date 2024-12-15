@@ -4,18 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Weather</title>
+    <link rel="stylesheet" href="/search.css">
 </head>
 <body>
-    <h1>USA Weather Search</h1>
+    <div class="container">
+        <header>
+            <h1>USA Weather Search</h1>
+        </header>
 
-    <form action="/searchresults" method="post">
-        <div>
-            <label for="zip">Zip Code:</label>
-            <input type="text" id="zip" name="zip" required>
-        </div>
-        <input type="submit" value="Search">
-    </form>
-    <hr>
-
+        <main>
+            <form action="/searchresults" method="post" class="form-container">
+                <div class="form-group">
+                    <label for="zip">Enter Zip Code:</label>
+                    <input type="text" id="zip" name="zip" placeholder="e.g., 20740" required>
+                </div>
+                <button type="submit">Search</button>
+            </form>
+        </main>
+    </div>
 </body>
 </html>
