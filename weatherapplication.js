@@ -19,16 +19,6 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const client = new MongoClient(uri, { serverApi: ServerApiVersion.v1 });
 const prompt = "Stop to shutdown the server: ";
 
-async function connectToMongoDB() {
-    try {
-        await client.connect();
-    } catch (e) {
-        console.log("Failed connecting to MongoDB");
-    }
-}
-
-connectToMongoDB();
-
 app.set("views", path.resolve(__dirname, "templates"));
 app.set("view engine", "ejs");
 
@@ -288,7 +278,6 @@ process.stdin.on("readable", async function () {
     const dataInput = process.stdin.read();
     const command = dataInput.trim();
     if (command.toLowerCase() === "stop") {
-        await client.close();
         process.stdout.write("Shutting down the server");
         process.exit(0);
     }
