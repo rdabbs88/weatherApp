@@ -27,13 +27,17 @@ async function connectToMongoDB() {
 connectToMongoDB();
 
 app.set("views", path.resolve(__dirname, "templates"));
-
 app.set("view engine", "ejs");
 
+/* Initializes request.body with post information */ 
 app.use(bodyParser.urlencoded({extended:false}));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+// Project routing below
+
+// GET request to our index page
 app.get("/", (request, response) => {
     response.render("index");
 });
