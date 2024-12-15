@@ -142,6 +142,9 @@ async function deleteLocation(username, zip) {
         const filter = {username: username};
         const result = await client.db(databaseName).collection(collectionName).updateOne(filter, {$pull: {zips: zip}});
 
+        // return true if a zip code was successfully deleted from the user's zip code array
+        return result.modifiedCount > 0;
+
     } catch (e) {
         console.error(`Error checking/adding to mongo table`);
     } finally {
@@ -220,14 +223,16 @@ app.post("/addconfirmation", async (request, response) => {
     if (zip.length !== 5) {
         response.render("ziperror", {"errorMessage": `${zip} has an invalid zip code length`});
     }
-    const weatherDataObj = await getWeather(zip);
+    else {
+        const weatherDataObj = await getWeather(zip);
 
-    if (weatherDataObj == -1) {
-        response.render("ziperror", {"errorMessage": `${zip} is an invalid zip code`});
-    }
-    else{
-        await addLocation(username, zip).catch(console.error);
-        response.render("addconfirmation");
+        if (weatherDataObj == -1) {
+            response.render("ziperror", {"errorMessage": `${zip} is an invalid zip code`});
+        }
+        else{
+            await addLocation(username, zip).catch(console.error);
+            response.render("addconfirmation");
+        }
     }
 
 });
@@ -248,25 +253,24 @@ app.post("/deleteconfirmation", async (request, response) => {
     let {username, zip} = request.body;
 
     // check if the username inputted is in the database
-    const hasWatchlist = inDatabase(username);
+    const hasWatchlist = await inDatabase(username);
+    console.log(`Does ${username} have a watchlist: ${hasWatchlist}`);
     // redirect user to an error page in the username does not exist in the database table
     if (!hasWatchlist){
         response.render("deleteError", {"errorMessage": `${username} does not have a watchlist`});
     }
+    else {
+        // maybe from here just check if the zip code provided is in the database (no matter), because there won't be invalid zip codes
+        const deletedZip = await deleteLocation(username, zip).catch(console.error);
 
-    // maybe from here just check if the zip code provided is in the database (no matter), because there won't be invalid zip codes
-
-    if (zip.length !== 5) {
-        response.render("ziperror", {"errorMessage": `${zip} has an invalid zip code length`});
-    }
-    const weatherDataObj = await getWeather(zip);
-
-    if (weatherDataObj == -1) {
-        response.render("ziperror", {"errorMessage": `${zip} is an invalid zip code`});
-    }
-    else{
-        await deleteLocation(username, zip).catch(console.error);
-        response.render("deleteconfirmation");
+        if(!deletedZip) {
+            console.log(`${zip} was not in ${username}'s watchlist`);
+            response.render("deleteError", {"errorMessage": `${zip} was not in ${username}'s watchlist`});
+        }
+        else {
+            console.log(`${zip} was successfully deleted from ${username}'s watchlist`);
+            response.render("deleteconfirmation", {"username": username, "zip": zip});
+        }
     }
 
 });
