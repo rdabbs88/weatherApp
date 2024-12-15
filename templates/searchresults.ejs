@@ -1,22 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-    
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Search Results</title>
-</head>
-
-<body>
-    Zip: <%- zip %><br>
-    City: <%- city %><br>
-    State: <%- state %><br>
-    Temperature: <%- temperature %><br>
-    Wind speed: <%- windSpeed %><br>
-    Weather Description: <%- weatherDescription %><br>
-    Feels Like: <%- feelsLike %><br>
-    Weather Icons: <%- weather_icons %><br>
-    <img src="<%= weather_icons[0] %>" alt="Image">
-</body>
-
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Weather Search Results</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <h1>Weather Query Results</h1>
+        <div class="weather-box-container">
+            <div class="weather-box">
+                <p class="location-info"><%- city %>, <%- state %> <%- zip %></p>
+                <hr class="line">
+                <div class="content">
+                    <div class="main-info">
+                        <div class="temp-info">
+                            <p class="temp"><%- temperature %>°F</p>
+                            <p class="weather-description"><%- weatherDescriptionAsString %></p>
+                        </div>
+                        <div>
+                            <img src="<%= weather_icons[0] %>" alt="sunny image" class="icon">
+                        </div>
+                    </div>
+                    <div class="additional-info">
+                        <div class="feels-like">
+                            <p class="feels-like-label">Feels Like</p>
+                            <p><%- feelsLike %>°F</p>
+                        </div>
+                        <div class="wind-speed">
+                            <p class="wind-speed-label">Wind Speed</p>
+                            <p><%- windSpeed %> mph</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>
+
+
+
+
+
+
+
+
+
+Weather Search Results
+Zip: <%- zip %><br>
+City: <%- city %><br>
+State: <%- state %><br>
+Temperature: <%- temperature %><br>
+Wind speed: <%- windSpeed %><br>
+Weather Description: <%- weatherDescription %><br>
+Feels Like: <%- feelsLike %><br>
+Weather Icons: <%- weather_icons %><br>

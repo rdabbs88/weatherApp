@@ -63,13 +63,22 @@ async function getWeather(zip) {
         const weatherDescription = data.current.weather_descriptions;
         const feelsLike = data.current.feelslike;
         const weather_icons = data.current.weather_icons;
+        
+        let weatherDescriptionAsString = "";
+        weatherDescription.forEach((elem) => {
+            weatherDescriptionAsString += `${elem}, `;
+        });
+
+        if (weatherDescriptionAsString !== "") {
+            weatherDescriptionAsString = weatherDescriptionAsString.trim().slice(0, -1);
+        }
 
         return {
             "temperature": temperature,
             "city": city, 
             "state": state,
             "windSpeed": windSpeed,
-            "weatherDescription": weatherDescription,
+            "weatherDescriptionAsString": weatherDescriptionAsString,
             "feelsLike": feelsLike,
             "weather_icons": weather_icons,
             "zip": zip
@@ -153,7 +162,7 @@ app.post("/searchresults", async (request, response) => {
         console.log(`city: ${weatherDataObj.city}`);
         console.log(`state: ${weatherDataObj.state}`);
         console.log(`Wind speed: ${weatherDataObj.windSpeed}`);
-        console.log(`Weather Description: ${weatherDataObj.weatherDescription}`);
+        console.log(`Weather Description: ${weatherDataObj.weatherDescriptionAsString}`);
         console.log(`Feels Like: ${weatherDataObj.feelsLike}`);
         console.log(`Weather Icons: ${weatherDataObj.weather_icons}`);
         console.log(`Zip: ${weatherDataObj.zip}`);
