@@ -97,6 +97,7 @@ async function getZips(username) {
 
         const filter = {username: username};
         const result = await client.db(databaseName).collection(collectionName).findOne(filter);
+        console.log(`Result from getZips ${result}`);
         // check if the user is already in the database
         if (result) {
             // Means user exists
@@ -259,19 +260,18 @@ app.get("/choosewatchlist", async (request, response) => {
 app.post("/viewwatchlist", async (request, response) => {
     const {username} = request.body;
     const zipArray = await getZips(username);
-    
+    console.log(`${username} zip array is type: ${typeof zipArray}`);
     let tableString = "<table border='1'><tr><th>Zip</th><th>City</th><th>State</th><th>Temperature</th><th>Weather Description</th></tr>";
     if (zipArray === -1) {
         response.render("viewerror", {"username": username});
+    }else {
+        for (const zip of zipArray) {
+            const {city, state, temperature, weatherDescriptionAsString} = await getWeather(zip);
+            tableString += `<tr><td>${zip}</td><td>${city}</td><td>${state}</td><td>${temperature}</td><td>${weatherDescriptionAsString}</td></tr>`;
+        }
+        tableString += "</table>";
+        response.render("viewwatchlist", {"username": username, "tableString": tableString});
     }
-
-    zipArray.forEach(async (zip) => {
-        const {city, state, temperature, weatherDescriptionAsString} = await getWeather(zip);
-        tableString += `<tr><td>${zip}</td><td>${city}</td><td>${state}</td><td>${temperature}</td><td>${weatherDescriptionAsString}</td></tr>`;
-    })
-
-    tableString += "</table>";
-    response.render("viewwatchlist", {"username": username, "tableString": tableString});
 });
 
 app.get("/delete", (request, response) => {
