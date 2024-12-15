@@ -12,7 +12,7 @@ body {
     border-radius: 10px;
 }
 
-header h1 {
+h1 {
     text-align: center;
     color: #00509E;
     font-size: 2rem;
@@ -49,5 +49,4 @@ button {
     background-color: #00509E;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
 }
