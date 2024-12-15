@@ -237,7 +237,6 @@ app.get("/choosewatchlist", (request, response) => {
 });
 
 app.post("/viewwatchlist", (request, response) => {
-    
 });
 
 app.get("/delete", (request, response) => {
