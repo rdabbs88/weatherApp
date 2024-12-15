@@ -251,7 +251,7 @@ app.post("/deleteconfirmation", async (request, response) => {
     }
     else {
         // maybe from here just check if the zip code provided is in the database (no matter), because there won't be invalid zip codes
-        const deletedZip = await deleteLocation(username, zip);
+        const deletedZip = await deleteLocation(username, zip).catch(console.error);
 
         if(!deletedZip) {
             console.log(`${zip} was not in ${username}'s watchlist`);
