@@ -40,8 +40,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Function to fetch weather data for a given location
 async function getWeather(zip) {
-    
-    //let temperature, city, state, windSpeed, weatherDescription, feelsLike, localTime;
 
     try {
       const response = await fetch(`${BASE_URL}?access_key=${process.env.API_KEY}&query=${zip}&units=${UNIT}`);
@@ -92,7 +90,39 @@ async function getWeather(zip) {
         //console.error("Error:", error);
         return -1;
     }
-  }
+}
+
+async function addLocation(username, zip) {
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+
+    try {
+        await client.connect();
+
+        const filter = {username: username};
+        const result = await client.db(databaseName).collection(collectionName).findOne(filter);
+        // check if the user is already in the database
+        if (result){
+            // Means user exists, add the zip code if not already there
+            if(!result.zips.includes(zip)) {
+                await client.db(databaseName).collection(collectionName).updateOne(filter, {$push: {zips:zip}});
+                console.log(`Added ${zip} to ${username}'s watchlist`);
+            }
+            else{
+                console.log(`The ZIP ${zip} already exists in ${username}'s watchlist`);
+            }
+        }
+        else{
+            const newUserWatchlist = {username: username, zips:[zip]};
+            await client.db(databaseName).collection(collectionName).insertOne(newUserWatchlist);
+            console.log(`Added the new user ${username} to table with ${zip}`);
+        }
+
+    } catch (e) {
+        console.error(`Error checking/adding to mongo table`);
+    } finally {
+        await client.close();
+    }
+}
 
 // Project routing below
 
@@ -133,6 +163,25 @@ app.post("/searchresults", async (request, response) => {
 
 app.get("/add", (request, response) => {
     response.render("add");
+});
+
+app.post("/addconfirmation", async (request, response) => {
+    let {username, zip} = request.body;
+
+    // check if the zip code inputted was valid
+    if (zip.length !== 5) {
+        response.render("ziperror", {"errorMessage": `${zip} has an invalid zip code length`});
+    }
+    const weatherDataObj = await getWeather(zip);
+
+    if (weatherDataObj == -1) {
+        response.render("ziperror", {"errorMessage": `${zip} is an invalid zip code`});
+    }
+    else{
+        await addLocation(username, zip).catch(console.error);
+        response.render("addconfirmation");
+    }
+
 });
 
 app.get("/watchlist", (request, response) => {
