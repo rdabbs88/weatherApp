@@ -58,7 +58,7 @@ async function getWeather(zip) {
         const windSpeed = data.current.wind_speed;
         const weatherDescription = data.current.weather_descriptions;
         const feelsLike = data.current.feelslike;
-        const localTime = data.location.localtime;
+        const weather_icons = data.current.weather_icons;
 
         return {
             "temperature": temperature,
@@ -67,7 +67,7 @@ async function getWeather(zip) {
             "windSpeed": windSpeed,
             "weatherDescription": weatherDescription,
             "feelsLike": feelsLike,
-            "localTime": localTime
+            "weather_icons": weather_icons
         };
 
       }
@@ -113,9 +113,9 @@ app.post("/searchresults", async (request, response) => {
         console.log(`Wind speed: ${weatherDataObj.windSpeed}`);
         console.log(`Weather Description: ${weatherDataObj.weatherDescription}`);
         console.log(`Feels Like: ${weatherDataObj.feelsLike}`);
-        console.log(`Local Time: ${weatherDataObj.localTime}`);
-
-        response.render("searchresults", weatherDataObj);
+        console.log(`Weather Icons: ${weatherDataObj.weather_icons}`);
+        weatherDataObj.zip = zip;
+        response.render("searchresults", {weatherDataObj});
     }
     
 });
