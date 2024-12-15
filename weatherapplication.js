@@ -45,13 +45,19 @@ async function getWeather(zip) {
 
     try {
       const response = await fetch(`${BASE_URL}?access_key=${process.env.API_KEY}&query=${zip}&units=${UNIT}`);
-
+      const data = await response.json();
       console.log("\nMake API request to WeatherStack");
-
-      // check if the API request was successful
-      if (response.ok && data.success) {
-        const data = await response.json();
-
+      // check if the API request was 
+      console.log(response.ok);
+      if (response.ok) {
+        console.log(data.success);
+        console.log(data.error);
+        if (data.error) {
+            console.error(`API Error: ${data.error.type} - ${data.error.info}`);
+            return -1;
+        }
+        console.log("API Request Successful");
+        console.log("Response successful");
         const temperature = data.current.temperature;
         const city = data.location.name;
         const state = data.location.region;
@@ -67,21 +73,25 @@ async function getWeather(zip) {
             "windSpeed": windSpeed,
             "weatherDescription": weatherDescription,
             "feelsLike": feelsLike,
-            "weather_icons": weather_icons
+            "weather_icons": weather_icons,
+            "zip": zip
         };
 
       }
       else {   // if API request for zip code didn't work (invalid ZIP)
-        console.log("INVALID ZIP, ENTERED ELSE");
+        console.log("response.ok returned false");
         return -1;
       }
     } 
     catch (error) {
         console.log("ENTERED CATCH");
+
+        if (data.error.type === "rate_limit_reached") {
+            console.log("API limit reached");
+        }
         //console.error("Error:", error);
         return -1;
     }
-  
   }
 
 // Project routing below
@@ -100,13 +110,15 @@ app.post("/searchresults", async (request, response) => {
     const {zip} = request.body;
 
     // call getWeather function to make a request to the API to grab the data we need
-    
+    if (zip.length !== 5) {
+        response.render("ziperror", {"errorMessage": `${zip} has an invalid zip code length`});
+    }
     const weatherDataObj = await getWeather(zip);
 
     if (weatherDataObj == -1) {
-        response.render("ziperror");
+        response.render("ziperror", {"errorMessage": `${zip} is an invalid zip code`});
     }
-    else{
+    else {
         console.log(`Weather in ${zip}: ${weatherDataObj.temperature}`);
         console.log(`city: ${weatherDataObj.city}`);
         console.log(`state: ${weatherDataObj.state}`);
@@ -114,10 +126,9 @@ app.post("/searchresults", async (request, response) => {
         console.log(`Weather Description: ${weatherDataObj.weatherDescription}`);
         console.log(`Feels Like: ${weatherDataObj.feelsLike}`);
         console.log(`Weather Icons: ${weatherDataObj.weather_icons}`);
-        weatherDataObj.zip = zip;
-        response.render("searchresults", {weatherDataObj});
+        console.log(`Zip: ${weatherDataObj.zip}`);
+        response.render("searchresults", weatherDataObj);
     }
-    
 });
 
 app.get("/add", (request, response) => {
