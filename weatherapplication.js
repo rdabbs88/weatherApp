@@ -4,6 +4,7 @@ process.stdin.setEncoding("utf8");
 const express = require("express");
 const path = require("path");
 require("dotenv").config();
+// const uri = `mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PASSWORD}@cluster0.o8lg7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 const uri = `mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PASSWORD}@cluster0.o8lg7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 const databaseName = process.env.MONGO_DB_NAME;
 const collectionName = process.env.MONGO_COLLECTION;
@@ -232,8 +233,12 @@ app.post("/addconfirmation", async (request, response) => {
 
 });
 
-app.get("/watchlist", (request, response) => {
-    response.render("watchlist");
+app.get("/choosewatchlist", (request, response) => {
+    response.render("choosewatchlist");
+});
+
+app.post("/viewwatchlist", (request, response) => {
+    
 });
 
 app.get("/delete", (request, response) => {
