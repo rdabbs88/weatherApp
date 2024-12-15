@@ -91,6 +91,31 @@ async function getWeather(zip) {
     }
 }
 
+async function getZips(username) {
+    try {
+        await client.connect();
+
+        const filter = {username: username};
+        const result = await client.db(databaseName).collection(collectionName).findOne(filter);
+        // check if the user is already in the database
+        if (result) {
+            // Means user exists
+            console.log("username in database");
+            return result.zips;
+        }
+        else {
+            // Means user does not exists
+            console.log("username not in database");
+            return -1;
+        }
+
+    } catch (e) {
+        console.error(`Error checking/adding to mongo table`);
+    } finally {
+        await client.close();
+    }
+}
+
 async function addLocation(username, zip) {
     //const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
@@ -186,7 +211,7 @@ app.post("/searchresults", async (request, response) => {
     }
     const weatherDataObj = await getWeather(zip);
 
-    if (weatherDataObj == -1) {
+    if (weatherDataObj === -1) {
         response.render("ziperror", {"errorMessage": `${zip} is an invalid zip code`});
     }
     else {
@@ -227,11 +252,26 @@ app.post("/addconfirmation", async (request, response) => {
 
 });
 
-app.get("/choosewatchlist", (request, response) => {
+app.get("/choosewatchlist", async (request, response) => {
     response.render("choosewatchlist");
 });
 
-app.post("/viewwatchlist", (request, response) => {
+app.post("/viewwatchlist", async (request, response) => {
+    const {username} = request.body;
+    const zipArray = await getZips(username);
+    
+    let tableString = "<table border='1'><tr><th>Zip</th><th>City</th><th>State</th><th>Temperature</th><th>Weather Description</th></tr>";
+    if (zipArray === -1) {
+        response.render("viewerror", {"username": username});
+    }
+
+    zipArray.forEach(async (zip) => {
+        const {city, state, temperature, weatherDescriptionAsString} = await getWeather(zip);
+        tableString += `<tr><td>${zip}</td><td>${city}</td><td>${state}</td><td>${temperature}</td><td>${weatherDescriptionAsString}</td></tr>`;
+    })
+
+    tableString += "</table>";
+    response.render("viewwatchlist", {"username": username, "tableString": tableString});
 });
 
 app.get("/delete", (request, response) => {
