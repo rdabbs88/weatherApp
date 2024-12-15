@@ -1,1 +1,99 @@
-/* hello */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: lightblue;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 50px;
+}
+
+.weather-box {
+    margin: 0 auto;
+    width: 700px;
+    height: 500px;
+    background-color: beige;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+}
+
+.main-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px;
+}
+
+.additional-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.temp-info {
+    background-color: lightblue;
+    padding: 10px;
+    text-align: center;
+}
+
+.feels-like {
+    font-size: 30px;
+    text-align: center;
+    padding: 10px;
+    background-color: lightblue;
+}
+
+.wind-speed {
+    background-color: lightblue;
+    font-size: 30px;
+    text-align: center;
+    padding: 10px;
+}
+
+.weather-description {
+    font-size: 22px;
+}
+
+.temp {
+    font-size: 140px;
+    font-weight: bold;
+}
+
+.location-info {
+    font-size: 30px;
+    text-align: center;
+}
+
+.wind-speed-label {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.feels-like-label {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.icon {
+    width: 120px;
+    height: 120px;
+}
+
+.line {
+    background-color: black;
+    height: 2px;
+    border: none;
+}
