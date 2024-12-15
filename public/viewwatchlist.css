@@ -1,0 +1,21 @@
+body{
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: rgb(15, 162, 211);
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+h1{
+    text-align: center;
+}
+
+table{
+    margin: 0 auto;
+}
