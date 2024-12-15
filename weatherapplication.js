@@ -290,17 +290,26 @@ app.post("/deleteconfirmation", async (request, response) => {
         response.render("deleteError", {"errorMessage": `${username} does not have a watchlist`});
     }
     else {
-        // maybe from here just check if the zip code provided is in the database (no matter), because there won't be invalid zip codes
-        const deletedZip = await deleteLocation(username, zip).catch(console.error);
+        
+        const userZips = await getZips(username);
+        // check if the existing username has no zip codes
+        if (userZips.length == 0){
+            response.render("deleteError", {"errorMessage": `${username} currently has no zip codes to delete`});
+        }
+        else{
+            // maybe from here just check if the zip code provided is in the database (no matter), because there won't be invalid zip codes
+            const deletedZip = await deleteLocation(username, zip).catch(console.error);
 
-        if(!deletedZip) {
-            console.log(`${zip} was not in ${username}'s watchlist`);
-            response.render("deleteError", {"errorMessage": `${zip} was not in ${username}'s watchlist`});
+            if(!deletedZip) {
+                console.log(`${zip} was not in ${username}'s watchlist`);
+                response.render("deleteError", {"errorMessage": `${zip} was not in ${username}'s watchlist`});
+            }
+            else {
+                console.log(`${zip} was successfully deleted from ${username}'s watchlist`);
+                response.render("deleteconfirmation", {"username": username, "zip": zip});
+            }
         }
-        else {
-            console.log(`${zip} was successfully deleted from ${username}'s watchlist`);
-            response.render("deleteconfirmation", {"username": username, "zip": zip});
-        }
+
     }
 
 });
