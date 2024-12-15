@@ -252,7 +252,7 @@ app.post("/deleteconfirmation", async (request, response) => {
     const hasWatchlist = inDatabase(username);
     // redirect user to an error page in the username does not exist in the database table
     if (!hasWatchlist){
-        response.render("usernameerror");
+        response.render("deleteError", {"errorMessage": `${username} does not have a watchlist`});
     }
 
     // maybe from here just check if the zip code provided is in the database (no matter), because there won't be invalid zip codes
