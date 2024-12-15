@@ -221,7 +221,7 @@ app.post("/addconfirmation", async (request, response) => {
         }
         else{
             await addLocation(username, zip).catch(console.error);
-            response.render("addconfirmation");
+            response.render("addconfirmation", {"username": username, "zip": zip});
         }
     }
 
