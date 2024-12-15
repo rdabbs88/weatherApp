@@ -20,14 +20,14 @@ h1 {
     margin: 10px 0;
 }
 
-/* Paragraph styles */
+
 main p {
     text-align: center;
     font-size: 1.2rem;
     color: #333;
 }
 
-/* Navigation styles */
+
 nav ul {
     list-style-type: none;
     padding: 0;
