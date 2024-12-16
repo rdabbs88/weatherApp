@@ -26,5 +26,12 @@
             </form>
         </main>
     </div>
+
+    <script>
+        const zip = document.getElementById("zip");
+        window.onsubmit = () => {
+            return window.confirm(`Are you sure you want to add the zip ${zip} to your watch list?`);
+        };
+    </script>
 </body>
 </html>
