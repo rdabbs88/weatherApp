@@ -267,7 +267,7 @@ app.post("/viewwatchlist", async (request, response) => {
     }else {
         for (const zip of zipArray) {
             const {city, state, temperature, weatherDescriptionAsString} = await getWeather(zip);
-            tableString += `<tr><td>${zip}</td><td>${city}</td><td>${state}</td><td>${temperature}</td><td>${weatherDescriptionAsString}</td></tr>`;
+            tableString += `<tr><td>${zip}</td><td>${city}</td><td>${state}</td><td>${temperature}°F</td><td>${weatherDescriptionAsString}</td></tr>`;
         }
         tableString += "</table>";
         response.render("viewwatchlist", {"username": username, "tableString": tableString});
