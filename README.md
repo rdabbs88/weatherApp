@@ -6,6 +6,8 @@
 
 **YouTube Video Link:** https://youtu.be/NtaojW5xL04 
             
-**APIs:** weatherstack (https://weatherstack.com/) (https://cmsc335finalproject-51y1.onrender.com/)
+**APIs:** weatherstack (https://weatherstack.com/) 
 
 **Contact Email:**  rdabbs88@terpmail.umd.edu 
+
+**Deploy Website:** (https://cmsc335finalproject-51y1.onrender.com/)
