@@ -21,8 +21,8 @@
     </form>
     
     <script>
-        const zip = document.getElementById("zip");
         window.onsubmit = () => {
+            const zip = document.getElementById("zip").value;
             return window.confirm(`Are you sure you want to delete the zip ${zip} from your watch list?`);
         };
     </script>
