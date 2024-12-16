@@ -14,7 +14,7 @@ const app = express();
 const BASE_URL = "http://api.weatherstack.com/current";
 const UNIT = "f";
 
-const portNumber = 3000;
+const portNumber = process.env.PORT || 3000;
 const server = http.createServer(app);
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
