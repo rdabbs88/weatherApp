@@ -4,27 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delete from Watchlist</title>
+    <link rel="stylesheet" href="/delete.css">
 </head>
 <body>
-    <h1>Delete from your watchlist</h1>
+    <div class="container">
+        <header>
+            <a href="/" class="home-icon">
+                <img src="/images/home.png" id="home-button" alt="Home" class="home-icon-img" width="30" height="30">
+            </a>
 
-    <form action="deleteconfirmation" method="post">
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-        <div>
-            <label for="zip">Zip Code:</label>
-            <input type="text" id="zip" name="zip" required>
-        </div>
-        <input type="submit" value="Submit">
-    </form>
+            <h1>Delete from your watchlist</h1>
+        </header>
+
+        <main>
+            <form action="/deleteconfirmation" method="post" class="form-container">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                    <label for="zip">Zip Code:</label>
+                    <input type="text" id="zip" name="zip" placeholder="e.g., 20740" required>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </main>
+    </div>
     
-    <script>
-        window.onsubmit = () => {
-            const zip = document.getElementById("zip").value;
-            return window.confirm(`Are you sure you want to delete the zip ${zip} from your watch list?`);
-        };
-    </script>
 </body>
+
+<script>
+    window.onsubmit = () => {
+        const zip = document.getElementById("zip").value;
+        return window.confirm(`Are you sure you want to delete the zip ${zip} from your watch list?`);
+    };
+</script>
+
 </html>

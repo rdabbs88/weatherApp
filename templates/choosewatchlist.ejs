@@ -7,14 +7,27 @@
     <link rel="stylesheet" href="/searchwatchlist.css">
 </head>
 <body>
-    <h1>Choose a Watchlist to View</h1>
-    <form action="/viewwatchlist" method="post">
-        <div class="container">
-        <label for="username">Enter Your Username:</label>
-        <input type="text" id="username" name="username" required>
-        <input type="submit" value="Submit">
+
+    <div class="container">
+        <header>
+            <a href="/" class="home-icon">
+                <img src="/images/home.png" id="home-button" alt="Home" class="home-icon-img" width="30" height="30">
+            </a>
+
+            <h1>Choose a Watchlist to View</h1>
+        </header>
+
+        <main>
+            <form action="/viewwatchlist" method="post" class="form-container">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                <button type="submit">Search</button>
+            </form>
+        </main>
+
     </div>
-    </form>
 
 </body>
 </html>

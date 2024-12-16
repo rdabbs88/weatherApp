@@ -8,10 +8,18 @@
 </head>
 <body>
     <div class="container">
-    <h1> <%- username %>'s Watchlist </h1> 
-    <div>
-        <%- tableString %>
+        <header>
+            <a href="/" class="home-icon">
+                <img src="/images/home.png" id="home-button" alt="Home" class="home-icon-img" width="30" height="30">
+            </a>
+
+            <h1> <%- username %>'s Watchlist </h1>
+        </header>
+
+        <div>
+            <%- tableString %>
+        </div>
+
     </div>
-</div>
 </body>
 </html>
