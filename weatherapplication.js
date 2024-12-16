@@ -288,7 +288,7 @@ app.post("/deleteconfirmation", async (request, response) => {
 });
 
 server.listen(portNumber, () => {
-    console.log(`Start on port ${port}`);
+    console.log(`Start on port ${portNumber}`);
 });
 
 /*app.listen(portNumber, (err) => {
