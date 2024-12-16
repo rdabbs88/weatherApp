@@ -1,4 +1,5 @@
 "use strict";
+const http = require('http');
 
 process.stdin.setEncoding("utf8");
 const express = require("express");
@@ -13,7 +14,8 @@ const app = express();
 const BASE_URL = "http://api.weatherstack.com/current";
 const UNIT = "f";
 
-// const portNumber = 3000;
+const portNumber = 3000;
+const server = http.createServer(app);
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const client = new MongoClient(uri, { serverApi: ServerApiVersion.v1 });
@@ -283,6 +285,10 @@ app.post("/deleteconfirmation", async (request, response) => {
 
     }
 
+});
+
+server.listen(portNumber, () => {
+    console.log(`Start on port ${port}`);
 });
 
 /*app.listen(portNumber, (err) => {
