@@ -21,8 +21,7 @@ const prompt = "Stop to shutdown the server: ";
 
 app.set("views", path.resolve(__dirname, "templates"));
 app.set("view engine", "ejs");
-
-/* Initializes request.body with post information */ 
+ 
 app.use(bodyParser.urlencoded({extended:false}));
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -34,18 +33,14 @@ async function getWeather(zip) {
     try {
       const response = await fetch(`${BASE_URL}?access_key=${process.env.API_KEY}&query=${zip}&units=${UNIT}`);
       const data = await response.json();
-      console.log("\nMake API request to WeatherStack");
-      // check if the API request was 
-      console.log(response.ok);
+      // console.log("\nMake API request to WeatherStack");
+      // check if the API request was successful 
+      // console.log(response.ok);
       if (response.ok) {
-        console.log(data.success);
-        console.log(data.error);
+        // console.log(data.error);
         if (data.error) {
-            console.error(`API Error: ${data.error.type} - ${data.error.info}`);
             return -1;
         }
-        console.log("API Request Successful");
-        console.log("Response successful");
         const temperature = data.current.temperature;
         const city = data.location.name;
         const state = data.location.region;
@@ -81,12 +76,9 @@ async function getWeather(zip) {
       }
     } 
     catch (error) {
-        console.log("ENTERED CATCH");
-
         if (data.error.type === "rate_limit_reached") {
             console.log("API limit reached");
         }
-        //console.error("Error:", error);
         return -1;
     }
 }
@@ -97,16 +89,14 @@ async function getZips(username) {
 
         const filter = {username: username};
         const result = await client.db(databaseName).collection(collectionName).findOne(filter);
-        console.log(`Result from getZips ${result}`);
+        
         // check if the user is already in the database
         if (result) {
             // Means user exists
-            console.log("username in database");
             return result.zips;
         }
         else {
             // Means user does not exists
-            console.log("username not in database");
             return -1;
         }
 
@@ -118,7 +108,6 @@ async function getZips(username) {
 }
 
 async function addLocation(username, zip) {
-    //const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
     try {
         await client.connect();
@@ -130,16 +119,11 @@ async function addLocation(username, zip) {
             // Means user exists, add the zip code if not already there
             if(!result.zips.includes(zip)) {
                 await client.db(databaseName).collection(collectionName).updateOne(filter, {$push: {zips:zip}});
-                console.log(`Added ${zip} to ${username}'s watchlist`);
-            }
-            else{
-                console.log(`The ZIP ${zip} already exists in ${username}'s watchlist`);
             }
         }
         else{
             const newUserWatchlist = {username: username, zips:[zip]};
             await client.db(databaseName).collection(collectionName).insertOne(newUserWatchlist);
-            console.log(`Added the new user ${username} to table with ${zip}`);
         }
 
     } catch (e) {
@@ -150,7 +134,6 @@ async function addLocation(username, zip) {
 }
 
 async function deleteLocation(username, zip) {
-    //const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
     try {
         await client.connect();
@@ -170,7 +153,6 @@ async function deleteLocation(username, zip) {
 
 // helper function that returns whether or not the user is in the database table
 async function inDatabase(username) {
-    //const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
     try {
         await client.connect();
@@ -179,7 +161,6 @@ async function inDatabase(username) {
         const result = await client.db(databaseName).collection(collectionName).findOne(filter);
         // return true if the user is already in the database
         if (result != null){
-            console.log(`${username} has a watchlist`);
             return true;
         }
         return false;
@@ -193,7 +174,6 @@ async function inDatabase(username) {
 
 // Project routing below
 
-// GET request to our index page
 app.get("/", (request, response) => {
     response.render("index");
 });
@@ -206,24 +186,17 @@ app.post("/searchresults", async (request, response) => {
 
     const {zip} = request.body;
 
-    // call getWeather function to make a request to the API to grab the data we need
     if (zip.length !== 5) {
         response.render("ziperror", {"errorMessage": `${zip} has an invalid zip code length`});
     }
+
+    // call getWeather function to make a request to the API to grab the data we need
     const weatherDataObj = await getWeather(zip);
 
     if (weatherDataObj === -1) {
         response.render("ziperror", {"errorMessage": `${zip} is an invalid zip code`});
     }
     else {
-        console.log(`Weather in ${zip}: ${weatherDataObj.temperature}`);
-        console.log(`city: ${weatherDataObj.city}`);
-        console.log(`state: ${weatherDataObj.state}`);
-        console.log(`Wind speed: ${weatherDataObj.windSpeed}`);
-        console.log(`Weather Description: ${weatherDataObj.weatherDescriptionAsString}`);
-        console.log(`Feels Like: ${weatherDataObj.feelsLike}`);
-        console.log(`Weather Icons: ${weatherDataObj.weather_icons}`);
-        console.log(`Zip: ${weatherDataObj.zip}`);
         response.render("searchresults", weatherDataObj);
     }
 });
@@ -260,11 +233,12 @@ app.get("/choosewatchlist", async (request, response) => {
 app.post("/viewwatchlist", async (request, response) => {
     const {username} = request.body;
     const zipArray = await getZips(username);
-    console.log(`${username} zip array is type: ${typeof zipArray}`);
+    
     let tableString = "<table border='1'><tr><th>Zip</th><th>City</th><th>State</th><th>Temperature</th><th>Weather Description</th></tr>";
     if (zipArray === -1) {
         response.render("viewerror", {"username": username});
-    }else {
+    }
+    else {
         for (const zip of zipArray) {
             const {city, state, temperature, weatherDescriptionAsString} = await getWeather(zip);
             tableString += `<tr><td>${zip}</td><td>${city}</td><td>${state}</td><td>${temperature}°F</td><td>${weatherDescriptionAsString}</td></tr>`;
@@ -284,8 +258,8 @@ app.post("/deleteconfirmation", async (request, response) => {
 
     // check if the username inputted is in the database
     const hasWatchlist = await inDatabase(username);
-    console.log(`Does ${username} have a watchlist: ${hasWatchlist}`);
-    // redirect user to an error page in the username does not exist in the database table
+
+    // redirect user to an error page if the username does not exist in the database table
     if (!hasWatchlist){
         response.render("deleteError", {"errorMessage": `${username} does not have a watchlist`});
     }
@@ -297,15 +271,12 @@ app.post("/deleteconfirmation", async (request, response) => {
             response.render("deleteError", {"errorMessage": `${username} currently has no zip codes to delete`});
         }
         else{
-            // maybe from here just check if the zip code provided is in the database (no matter), because there won't be invalid zip codes
             const deletedZip = await deleteLocation(username, zip).catch(console.error);
 
             if(!deletedZip) {
-                console.log(`${zip} was not in ${username}'s watchlist`);
                 response.render("deleteError", {"errorMessage": `${zip} was not in ${username}'s watchlist`});
             }
             else {
-                console.log(`${zip} was successfully deleted from ${username}'s watchlist`);
                 response.render("deleteconfirmation", {"username": username, "zip": zip});
             }
         }
