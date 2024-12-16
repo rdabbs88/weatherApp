@@ -13,7 +13,7 @@ const app = express();
 const BASE_URL = "http://api.weatherstack.com/current";
 const UNIT = "f";
 
-const portNumber = 3000;
+// const portNumber = 3000;
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const client = new MongoClient(uri, { serverApi: ServerApiVersion.v1 });
@@ -285,16 +285,16 @@ app.post("/deleteconfirmation", async (request, response) => {
 
 });
 
-app.listen(portNumber, (err) => {
+/*app.listen(portNumber, (err) => {
     if (err) {
       console.log("Starting server failed.");
     } else {
       console.log(`Web server started and running at http://localhost:${portNumber}`);
       process.stdout.write(prompt);
     }
-});
+});*/
 
-process.stdin.on("readable", async function () {
+/*process.stdin.on("readable", async function () {
     const dataInput = process.stdin.read();
     const command = dataInput.trim();
     if (command.toLowerCase() === "stop") {
@@ -307,4 +307,4 @@ process.stdin.on("readable", async function () {
 
     process.stdout.write(prompt);
     process.stdin.resume();
-});
+});*/
