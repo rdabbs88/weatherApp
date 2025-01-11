@@ -5,7 +5,7 @@ process.stdin.setEncoding("utf8");
 const express = require("express");
 const path = require("path");
 require("dotenv").config();
-const uri = `mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PASSWORD}@cluster0.o8lg7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const uri = `mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_PASSWORD}@cluster0.fcjz4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 const databaseName = process.env.MONGO_DB_NAME;
 const collectionName = process.env.MONGO_COLLECTION;
 const bodyParser = require("body-parser");
@@ -289,6 +289,7 @@ app.post("/deleteconfirmation", async (request, response) => {
 
 server.listen(portNumber, () => {
     console.log(`Start on port ${portNumber}`);
+    // console.log(`Web server started and running at http://localhost:${portNumber}`);
 });
 
 /*app.listen(portNumber, (err) => {
