@@ -6,4 +6,4 @@
             
 **APIs:** weatherstack (https://weatherstack.com/) 
 
-**Deploy Website:** (https://cmsc335finalproject-51y1.onrender.com/)
+**Deployed Website:** (https://cmsc335finalproject-51y1.onrender.com/)
